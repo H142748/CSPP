@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrice de pondération interactive</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .instructions {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .dimension {
+            text-align: left;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .high { background-color: #27ae60; color: white; }
+        .medium { background-color: #f39c12; color: white; }
+        .low { background-color: #95a5a6; color: white; }
+        
+        .calculator {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        
+        select, input {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #d5f4e6;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .tips {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Matrice de pondération des dimensions d'expérience client</h1>
+        
+        <div class="instructions">
+            <strong>Mode d'emploi :</strong> Cette matrice vous aide à personnaliser votre approche selon vos segments clients. Les pondérations sont ici de simples suggestions.
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Dimension</th>
+                    <th>TPE<br>(< 10 salariés)</th>
+                    <th>PME<br>(10-50 salariés)</th>
+                    <th>Start-up / Tech</th>
+                    <th>Professions libérales</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="dimension">Expertise technique</td>
+                    <td class="medium">15%</td>
+                    <td class="high">25%</td>
+                    <td class="medium">15%</td>
+                    <td class="high">20%</td>
+                </tr>
+                <tr>
+                    <td class="dimension">Réactivité</td>
+                    <td class="high">25%</td>
+                    <td class="high">20%</td>
+                    <td class="high">30%</td>
+                    <td class="medium">15%</td>
+                </tr>
+                <tr>
+                    <td class="dimension">Proactivité</td>
+                    <td class="medium">10%</td>
+                    <td class="medium">15%</td>
+                    <td class="high">20%</td>
+                    <td class="medium">15%</td>
+                </tr>
+                <tr>
+                    <td class="dimension">Clarté pédagogique</td>
+                    <td class="high">20%</td>
+                    <td class="medium">10%</td>
+                    <td class="low">5%</td>
+                    <td class="medium">15%</td>
+                </tr>
+                <tr>
+                    <td class="dimension">Relation humaine</td>
+                    <td class="high">20%</td>
+                    <td class="medium">15%</td>
+                    <td class="low">10%</td>
+                    <td class="high">20%</td>
+                </tr>
+                <tr>
+                    <td class="dimension">Digitalisation</td>
+                    <td class="low">5%</td>
+                    <td class="medium">10%</td>
+                    <td class="high">20%</td>
+                    <td class="low">10%</td>
+                </tr>
+                <tr>
+                    <td class="dimension">Rapport qualité/prix</td>
+                    <td class="low">5%</td>
+                    <td class="low">5%</td>
+                    <td class="low">0%</td>
+                    <td class="low">5%</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="calculator">
+            <h3>Calculateur de score pondéré personnalisé</h3>
+            <p>Sélectionnez votre segment client principal et entrez vos scores par dimension (0-10) :</p>
+            
+            <div>
+                <label>Segment client : </label>
+                <select id="segment">
+                    <option value="tpe">TPE (< 10 salariés)</option>
+                    <option value="pme">PME (10-50 salariés)</option>
+                    <option value="startup">Start-up / Tech</option>
+                    <option value="liberal">Professions libérales</option>
+                </select>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <table style="width: auto;">
+                    <tr>
+                        <td>Expertise technique :</td>
+                        <td><input type="number" id="score1" min="0" max="10" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td>Réactivité :</td>
+                        <td><input type="number" id="score2" min="0" max="10" value="8"></td>
+                    </tr>
+                    <tr>
+                        <td>Proactivité :</td>
+                        <td><input type="number" id="score3" min="0" max="10" value="6"></td>
+                    </tr>
+                    <tr>
+                        <td>Clarté pédagogique :</td>
+                        <td><input type="number" id="score4" min="0" max="10" value="7"></td>
+                    </tr>
+                    <tr>
+                        <td>Relation humaine :</td>
+                        <td><input type="number" id="score5" min="0" max="10" value="8"></td>
+                    </tr>
+                    <tr>
+                        <td>Digitalisation :</td>
+                        <td><input type="number" id="score6" min="0" max="10" value="5"></td>
+                    </tr>
+                    <tr>
+                        <td>Rapport qualité/prix :</td>
+                        <td><input type="number" id="score7" min="0" max="10" value="7"></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <button onclick="calculateScore()">Calculer le score global</button>
+            
+            <div id="result"></div>
+        </div>
+        
+        <div class="tips">
+            <h3>💡 Conseils d'utilisation</h3>
+            <ul>
+                <li>Adaptez ces pondérations selon votre positionnement stratégique</li>
+                <li>Révisez-les annuellement en fonction de l'évolution de votre portefeuille</li>
+                <li>Utilisez des pondérations différentes pour vos analyses par segment</li>
+                <li>Communiquez en interne sur les dimensions prioritaires par type de client</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        const weights = {
+            tpe: [0.15, 0.25, 0.10, 0.20, 0.20, 0.05, 0.05],
+            pme: [0.25, 0.20, 0.15, 0.10, 0.15, 0.10, 0.05],
+            startup: [0.15, 0.30, 0.20, 0.05, 0.10, 0.20, 0.00],
+            liberal: [0.20, 0.15, 0.15, 0.15, 0.20, 0.10, 0.05]
+        };
+        
+        function calculateScore() {
+            const segment = document.getElementById('segment').value;
+            const scores = [];
+            for (let i = 1; i <= 7; i++) {
+                scores.push(parseFloat(document.getElementById('score' + i).value) || 0);
+            }
+            
+            const segmentWeights = weights[segment];
+            let weightedScore = 0;
+            let details = '<h4>Détail du calcul :</h4><ul>';
+            
+            const dimensions = [
+                'Expertise technique', 'Réactivité', 'Proactivité', 
+                'Clarté pédagogique', 'Relation humaine', 'Digitalisation', 
+                'Rapport qualité/prix'
+            ];
+            
+            scores.forEach((score, index) => {
+                const weighted = score * segmentWeights[index];
+                weightedScore += weighted;
+                details += `<li>${dimensions[index]} : ${score} × ${(segmentWeights[index] * 100).toFixed(0)}% = ${weighted.toFixed(2)}</li>`;
+            });
+            
+            details += '</ul>';
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h3>Score global pondéré : ${weightedScore.toFixed(2)}/10</h3>
+                ${details}
+                <p><strong>Interprétation :</strong> ${
+                    weightedScore >= 8 ? 'Excellence - Vous êtes dans le top 10% du marché' :
+                    weightedScore >= 7 ? 'Très bon niveau - Quelques ajustements suffisent' :
+                    weightedScore >= 6 ? 'Niveau correct - Des améliorations sont nécessaires' :
+                    'Niveau insuffisant - Plan d\'action urgent requis'
+                }</p>
+            `;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
